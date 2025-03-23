@@ -4,44 +4,42 @@ Print, filter, sort lines that match a semantic version (https://semver.org)
 Internally uses https://crates.io/crates/semver for sorting and matching. Filter expressions syntax is described [here](https://docs.rs/semver/1.0.9/semver/struct.VersionReq.html#syntax)
 
 ```
+$ semver help
 Print, filter, sort lines that match a semantic version (https://semver.org).
 
-Print lines that match a semantic version to standard output. With no FILE, or when FILE is '-',
-read standard input.
+Print lines that match a semantic version to standard output. If FILE is '-', read lines from standard input.
 
-USAGE:
-    semver [OPTIONS] [FILES]...
+Usage: semver <COMMAND>
 
-ARGS:
-    <FILES>...
-            Files to process, if '-' read standard input
+Commands:
+  match        Print lines that match a semver version
+  invert       Print lines that do not match a semver version
+  completions  Generate completion for the specified shell and exit
+  help         Print this message or the help of the given subcommand(s)
 
-OPTIONS:
-    --completion <SHELL>
-          Generate completion for the specified shell and exit
-          
-          [possible values: bash, elvish, fish, powershell, zsh]
+Options:
+  -h, --help
+          Print help (see a summary with '-h')
 
-    -f, --filter <EXPR>
-            Filter versions according to expression. Has no meaning with --invert
+  -V, --version
+          Print version
+```
 
-    -h, --help
-            Print help information
+```
+$ semver help match
+Print lines that match a semver version
 
-    -i, --invert
-            Invert match, i.e. print lines that not match a semantic version
+Usage: semver match [OPTIONS] <FILE>...
 
-    -r, --reverse
-            Sort lines in reversed order
+Arguments:
+  <FILE>...  Files to process, if '-' read standard input
 
-    -s, --sort
-            Sort lines
-
-    -u, --uniq
-            Removes repeated versions (implies --sort)
-
-    -V, --version
-            Print version information
+Options:
+  -s, --sort           Sort lines
+  -r, --reverse        Sort lines in reversed order
+  -u, --uniq           Removes repeated versions (implies --sort)
+  -f, --filter <EXPR>  Filter versions according to expression
+  -h, --help           Print help 
 ```
 
 ## Examples
@@ -49,23 +47,23 @@ OPTIONS:
 Print git tags that matches a semantic version.
 
 ```bash
-git tag | semver
+git tag | semver match
 ```
 
 Print the highest sematic version in current git repo.
 
 ```bash
-git tag | semver --sort | tail -n1
+git tag | semver m --sort - | tail -n1
 ```
 
 Print lines that matches a semantic version and has major version number 1 from specified file.
 
 ```bash
-semver --filter '>= 1, <2' tags.txt
+semver m --filter '>= 1, <2' tags.txt
 ```
 
 Print all versions between `1.2.0` and `1.3.7` (inclusive) from specified files.
 
 ```bash
-semver --filter '>= 1.2.0, <=1.3.7' tags1.txt tags2.txt
+semver m --filter '>= 1.2.0, <=1.3.7' tags1.txt tags2.txt
 ```

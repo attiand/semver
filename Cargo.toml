@@ -1,6 +1,6 @@
 [package]
 name = "version"
-version = "2.5.0"
+version = "3.0.0"
 edition = "2021"
 
 [[bin]]
@@ -10,7 +10,7 @@ path = "src/main.rs"
 [dependencies]
 semver = "1.0.9"
 clap = { version = "4.5.23", features = ["derive"] }
-clap_complete = { version = "4.5.40" }
+clap_complete_command = { version = "0.6.1" }
 
 [dev-dependencies]
 tempfile = "3"
