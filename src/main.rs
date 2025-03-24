@@ -1,9 +1,7 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
+use clap::{CommandFactory, Parser, Subcommand};
 use semver::{Version, VersionReq};
 
-use clap::{CommandFactory, Parser, Subcommand};
+use version::process_files;
 
 /// Print, filter, sort lines that match a semantic version (https://semver.org).
 ///
@@ -53,34 +51,6 @@ enum Commands {
         #[arg(value_enum)]
         shell: clap_complete_command::Shell,
     },
-}
-
-fn process_files<F>(files: &Vec<String>, mut consumer: F) -> std::io::Result<()>
-where
-    F: FnMut(String),
-{
-    if files.first().unwrap().eq("-") {
-        let buffer = BufReader::new(std::io::stdin());
-
-        for line in buffer.lines().map_while(Result::ok) {
-            consumer(line);
-        }
-    } else {
-        for fname in files {
-            match File::open(fname) {
-                Ok(f) => {
-                    let buffer = BufReader::new(f);
-
-                    for line in buffer.lines().map_while(Result::ok) {
-                        consumer(line);
-                    }
-                }
-                Err(e) => return Err(e),
-            }
-        }
-    }
-
-    Ok(())
 }
 
 fn print_invert(line: String) {
