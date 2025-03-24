@@ -1,7 +1,7 @@
 use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Result};
 
-pub fn process_files<F>(files: &Vec<String>, mut consumer: F) -> std::io::Result<()>
+pub fn process_files<F>(files: &Vec<String>, mut consumer: F) -> Result<()>
 where
     F: FnMut(String),
 {
