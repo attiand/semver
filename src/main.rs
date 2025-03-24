@@ -9,7 +9,7 @@ use clap::{CommandFactory, Parser, Subcommand};
 ///
 /// Print lines that match a semantic version to standard output. If FILE is '-', read lines from standard input.
 #[derive(Parser)]
-#[clap(author, version, about)]
+#[clap(author, version, about, bin_name = "semver")]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
@@ -41,7 +41,7 @@ enum Commands {
         files: Vec<String>,
     },
     /// Print lines that do not match a semver version.
-    #[clap(aliases = &["nom", "nomatch"])]
+    #[clap(aliases = &["i", "nomatch"])]
     Invert {
         /// Files to process, if '-' read standard input
         #[clap(name = "FILE", required = true, num_args = 1.., value_hint = clap::ValueHint::FilePath)]
@@ -75,7 +75,6 @@ where
                         consumer(line);
                     }
                 }
-
                 Err(e) => return Err(e),
             }
         }
