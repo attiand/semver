@@ -32,7 +32,7 @@ enum Commands {
 
         /// Filter versions according to expression.
         #[clap(short, long, num_args(1), value_name("EXPR"), value_hint = clap::ValueHint::Other)]
-        filter: Option<String>,
+        filter: Option<VersionReq>,
 
         /// Files to process, if '-' read standard input
         #[clap(name = "FILE", required = true, num_args = 1.., value_hint = clap::ValueHint::FilePath)]
@@ -76,21 +76,13 @@ fn main() -> Result<(), String> {
             filter,
             files,
         } => {
-            let requirement: Option<VersionReq> = match filter {
-                Some(f) => match VersionReq::parse(f) {
-                    Ok(r) => Some(r),
-                    Err(e) => return Err(format!("Illegal filter format expression: {e}")),
-                },
-                None => None,
-            };
-
             if *sort || *reverse || *uniq {
                 let mut versions: Vec<Version> = Vec::new();
 
                 let collect_semver = |line: String| {
                     if let Ok(v) = Version::parse(&line) {
-                        if requirement.as_ref().is_none()
-                            || requirement.as_ref().is_some_and(|r| r.matches(&v))
+                        if filter.as_ref().is_none()
+                            || filter.as_ref().is_some_and(|r| r.matches(&v))
                         {
                             versions.push(v);
                         }
@@ -120,8 +112,8 @@ fn main() -> Result<(), String> {
             } else {
                 let print_semver = |line: String| {
                     if let Ok(v) = Version::parse(&line) {
-                        if requirement.as_ref().is_none()
-                            || requirement.as_ref().is_some_and(|r| r.matches(&v))
+                        if filter.as_ref().is_none()
+                            || filter.as_ref().is_some_and(|r| r.matches(&v))
                         {
                             println!("{}", v);
                         }
