@@ -1,11 +1,9 @@
 use clap::{CommandFactory, Parser, Subcommand};
 use semver::{Version, VersionReq};
 
-use version::process_files;
+use version::{process_files, InputHandle};
 
 /// Print, filter, sort lines that match a semantic version (https://semver.org).
-///
-/// Print lines that match a semantic version to standard output. If FILE is '-', read lines from standard input.
 #[derive(Parser)]
 #[clap(author, version, about, bin_name = "semver")]
 struct Cli {
@@ -36,14 +34,14 @@ enum Commands {
 
         /// Files to process, if '-' read standard input
         #[clap(name = "FILE", required = true, num_args = 1.., value_hint = clap::ValueHint::FilePath)]
-        files: Vec<String>,
+        files: Vec<InputHandle>,
     },
     /// Print lines that do not match a semver version.
     #[clap(aliases = &["i", "nomatch"])]
     Invert {
         /// Files to process, if '-' read standard input
         #[clap(name = "FILE", required = true, num_args = 1.., value_hint = clap::ValueHint::FilePath)]
-        files: Vec<String>,
+        files: Vec<InputHandle>,
     },
     /// Generate completion for the specified shell and exit
     Completions {

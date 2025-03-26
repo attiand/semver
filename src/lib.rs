@@ -1,19 +1,49 @@
 use std::fs::File;
-use std::io::{BufRead, BufReader, Result};
+use std::io::{BufRead, BufReader};
+use std::path::PathBuf;
+use std::str::FromStr;
 
-pub fn process_files<F>(files: &Vec<String>, mut consumer: F) -> Result<()>
+/// A input handle is either Some file path or None for stdin 
+#[derive(Clone)]
+pub struct InputHandle {
+    path: Option<PathBuf>,
+}
+
+impl FromStr for InputHandle {
+    type Err = String;
+
+    fn from_str(path: &str) -> Result<Self, Self::Err> {
+        if path.ne("-") {
+            let p = PathBuf::from(&path);
+            if p.is_file() && p.exists() {
+                Ok(InputHandle { path: Some(p) })
+            } else {
+                Err(format!("{path} is not a valid input file"))
+            }
+        } else {
+            Ok(InputHandle { path: None })
+        }
+    }
+}
+
+pub fn process_files<F>(inputs: &Vec<InputHandle>, mut consumer: F) -> std::io::Result<()>
 where
     F: FnMut(String),
 {
-    if files.first().unwrap().eq("-") {
-        let buffer = BufReader::new(std::io::stdin());
+    match inputs.first() {
+        Some(_) => {
+            for input in inputs {
+                if let Some(i) = &input.path {
+                    let buffer = BufReader::new(File::open(i)?);
 
-        for line in buffer.lines() {
-            consumer(line?);
+                    for line in buffer.lines() {
+                        consumer(line?);
+                    }
+                }
+            }
         }
-    } else {
-        for fname in files {
-            let buffer = BufReader::new(File::open(fname)?);
+        None => {
+            let buffer = BufReader::new(std::io::stdin());
 
             for line in buffer.lines() {
                 consumer(line?);
