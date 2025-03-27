@@ -3,7 +3,7 @@ use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 use std::str::FromStr;
 
-/// A input handle is either Some file path or None for stdin 
+/// A input handle is either Some file path or None for stdin
 #[derive(Clone)]
 pub struct InputHandle {
     path: Option<PathBuf>,

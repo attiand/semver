@@ -13,4 +13,4 @@ clap = { version = "4.5.32", features = ["derive"] }
 clap_complete_command = { version = "0.6.1" }
 
 [dev-dependencies]
-tempfile = "3"
+test-generator = "^0.3"
