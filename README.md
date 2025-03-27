@@ -42,6 +42,10 @@ Options:
   -h, --help           Print help 
 ```
 
+## Install
+```bash
+cargo install --git git@github.com:attiand/semver.git
+```
 ## Examples
 
 Print git tags that matches a semantic version.
