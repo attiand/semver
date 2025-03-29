@@ -30,7 +30,7 @@ pub fn process_files<F>(inputs: &Vec<InputHandle>, mut consumer: F) -> std::io::
 where
     F: FnMut(String),
 {
-    match inputs.first() {
+    match inputs.first().unwrap().path {
         Some(_) => {
             for input in inputs {
                 if let Some(i) = &input.path {

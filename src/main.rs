@@ -1,3 +1,5 @@
+use std::io::{stdout, Write};
+
 use clap::{CommandFactory, Parser, Subcommand};
 use semver::{Version, VersionReq};
 
@@ -32,14 +34,14 @@ enum Commands {
         #[clap(short, long, num_args(1), value_name("EXPR"), value_hint = clap::ValueHint::Other)]
         filter: Option<VersionReq>,
 
-        /// Files to process, if '-' read standard input
+        /// Files to process; '-' for standard input.
         #[clap(name = "FILE", required = true, num_args = 1.., value_hint = clap::ValueHint::FilePath)]
         files: Vec<InputHandle>,
     },
     /// Print lines that do not match a semver version.
     #[clap(aliases = &["i", "nomatch"])]
     Invert {
-        /// Files to process, if '-' read standard input
+        /// Files to process; '-' for standard input.
         #[clap(name = "FILE", required = true, num_args = 1.., value_hint = clap::ValueHint::FilePath)]
         files: Vec<InputHandle>,
     },
@@ -53,7 +55,7 @@ enum Commands {
 
 fn print_invert(line: String) {
     if Version::parse(&line).is_err() {
-        println!("{}", line);
+        println!("{line}");
     }
 }
 
@@ -101,8 +103,9 @@ fn main() -> Result<(), String> {
                             versions.reverse()
                         }
 
-                        for version in versions.iter() {
-                            println!("{version}")
+                        let mut lock = stdout().lock();
+                        for version in versions {
+                            writeln!(lock, "{version}").unwrap();
                         }
                     }
                     Err(e) => return Err(e.to_string()),
@@ -113,7 +116,7 @@ fn main() -> Result<(), String> {
                         if filter.as_ref().is_none()
                             || filter.as_ref().is_some_and(|r| r.matches(&v))
                         {
-                            println!("{}", v);
+                            println!("{v}");
                         }
                     }
                 };

@@ -16,11 +16,22 @@ fn should_process_file(resource: &str) {
         lines.push(line);
     };
 
-    process_files(&Vec::from([handle]), collect_lines).unwrap();
+    process_files(&Vec::from([handle.clone(), handle.clone()]), collect_lines).unwrap();
 
-    assert_eq!(lines.len(), 5);
+    assert_eq!(lines.len(), 10);
     assert_eq!(
         lines,
-        vec!["2.4.7", "no semver", "10.3.5", "1.2.6", "2.4.5"]
+        vec![
+            "2.4.7",
+            "no semver",
+            "10.3.5",
+            "1.2.6",
+            "2.4.5",
+            "2.4.7",
+            "no semver",
+            "10.3.5",
+            "1.2.6",
+            "2.4.5"
+        ]
     );
 }
