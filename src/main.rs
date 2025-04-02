@@ -92,7 +92,7 @@ fn main() -> Result<(), String> {
                 match process_files(files, collect_semver) {
                     Ok(_) => {
                         if *sort || *uniq {
-                            versions.sort();
+                            versions.sort()
                         }
 
                         if *uniq {
@@ -105,7 +105,7 @@ fn main() -> Result<(), String> {
 
                         let mut lock = stdout().lock();
                         for version in versions {
-                            writeln!(lock, "{version}").unwrap();
+                            writeln!(lock, "{version}").unwrap()
                         }
                     }
                     Err(e) => return Err(e.to_string()),
@@ -116,7 +116,7 @@ fn main() -> Result<(), String> {
                         if filter.as_ref().is_none()
                             || filter.as_ref().is_some_and(|r| r.matches(&v))
                         {
-                            println!("{v}");
+                            println!("{v}")
                         }
                     }
                 };
@@ -128,7 +128,7 @@ fn main() -> Result<(), String> {
             }
         }
         Commands::Completions { shell } => {
-            shell.generate(&mut Cli::command(), &mut std::io::stdout());
+            shell.generate(&mut Cli::command(), &mut std::io::stdout())
         }
     }
 

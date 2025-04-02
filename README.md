@@ -1,7 +1,7 @@
 # semver
 Print, filter, sort lines that match a semantic version (https://semver.org)
 
-Internally uses https://crates.io/crates/semver for sorting and matching. Filter expressions syntax is described [here](https://docs.rs/semver/1.0.9/semver/struct.VersionReq.html#syntax)
+Internally uses https://crates.io/crates/semver for matching and sorting. Filter expressions syntax is described [here](https://docs.rs/semver/1.0.9/semver/struct.VersionReq.html#syntax)
 
 ```
 $ semver help
@@ -44,14 +44,14 @@ Options:
 
 ## Install
 ```bash
-cargo install --git git@github.com:attiand/semver.git
+cargo install --git https://github.com/attiand/semver.git
 ```
 ## Examples
 
 Print git tags that matches a semantic version.
 
 ```bash
-git tag | semver match
+git tag | semver match -
 ```
 
 Print the highest sematic version in current git repo.
