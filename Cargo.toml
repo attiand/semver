@@ -1,15 +1,15 @@
 [package]
 name = "version"
-version = "3.2.0"
-edition = "2021"
+version = "3.3.0"
+edition = "2024"
 
 [[bin]]
 name = "semver"
 path = "src/main.rs"
 
 [dependencies]
-semver = "1.0.9"
-clap = { version = "4.5.32", features = ["derive"] }
+semver = "1.0.28"
+clap = { version = "4.6.0", features = ["derive"] }
 clap_complete_command = { version = "0.6.1" }
 
 [dev-dependencies]
